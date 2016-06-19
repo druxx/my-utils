@@ -2,4 +2,7 @@
 
 my utilities
 
-autosync: using watchmedo and rsync to keep external directory in sync
+autosync: using watchdog and rsync to keep external directory in sync
+ - pip install watchdog
+ 
+
