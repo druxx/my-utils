@@ -45,11 +45,11 @@ class RsyncJob(LoggingEventHandler):
         self.syncing = False
     
     def on_any_event(self, event):
+        self.logger.debug( event.src_path )
         if not self.syncing:
             time.sleep( 2 )
             if not self.syncing:
                 self.sync()
-        self.logger.info( event.src_path )
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser( formatter_class=argparse.ArgumentDefaultsHelpFormatter )
