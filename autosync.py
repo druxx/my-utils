@@ -33,6 +33,8 @@ class RsyncJob(LoggingEventHandler):
         if args.type:
             if args.type == 'git':
                 self.exclude = '--exclude-from=- <<EOF\n.git/\n.DS_Store\n.project\n.pydevproject\nREADME.md\nEOF'
+            if args.type == 'svn':
+                self.exclude = '--exclude-from=- <<EOF\n.svn/\n.DS_Store\n.project\n.pydevproject\nREADME.md\nEOF'
         
         observer.schedule( self, self.source, recursive=True )
                 
