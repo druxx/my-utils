@@ -32,6 +32,10 @@ class RsyncJob(LoggingEventHandler):
         self.copy_links = ''
         if args.copy_links:
             self.copy_links = '--copy-links'
+            
+        self.ssh = ''
+        if args.ssh:
+            self.ssh = '-e "' + args.ssh + '"'
     
         self.exclude = ''
         if args.type:
@@ -45,7 +49,7 @@ class RsyncJob(LoggingEventHandler):
     def sync(self):
         self.syncing = True
         self.logger.info( 'syncing {} to {}'.format( self.source, self.dest ) )
-        command = 'rsync -avz {} {} {} {}'.format( self.copy_links, self.source, self.dest, self.exclude )
+        command = 'rsync -avz {} {} {} {} {}'.format( self.ssh, self.copy_links, self.source, self.dest, self.exclude )
         self.logger.debug( command )
         os.system( command )
         self.syncing = False
@@ -65,6 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('-u','--user', action='store', default=None, help='remote user')
     parser.add_argument('-t','--type', action='store', default=None, help='depending on \'type\' of directory, files and directories might be ignored. Currently known: git')
     parser.add_argument('-c','--copy-links', action='store_true', default=False, help="apply rsync's copy-links option")
+    parser.add_argument('-e','--ssh', action='store', default=None, help="remote shell command to be used, e.g. 'ssh -p 2222'")
 
     parser.add_argument('-l','--log', action='store', default=None, help='logfile')
     parser.add_argument('-p','--pid', action='store', default=None, help='pid file')
