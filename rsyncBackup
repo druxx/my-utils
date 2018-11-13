@@ -1,0 +1,31 @@
+#! /bin/bash
+#
+
+backupHost=backups@natuya.net
+src=/
+dest=odroidF
+
+ssh $backupHost 'cd $dest; rm -rf new; mkdir new'
+
+
+rsync  -v -a --delete --link-dest=../latest/  ~/git $backupHost:$dest/new  --include='/data/**/'  --exclude-from=- <<EOF
+/var/log/**
+/data/var/log/**
+/nfs/**
+/tmp/*
+/run/*
+/sys/*
+/proc/*
+/dev/*
+**lost+found
+EOF
+#
+echo
+echo 'rsync done'
+
+ssh $backupHost 'cd $dest; newDir=`date "+%Y-%0m-%0d_%H:%M"`; mv new $newDir; rm -rf latest; ln -s $newDir latest'
+
+date
+
+#
+
